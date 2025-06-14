@@ -42,6 +42,7 @@ $("document").ready(function (e) {
 		drop: function (event, ui) {
 			gameStats.clientsServed++;
 			updateStats()
+			$(ui.draggable).remove();
 		}
 	});
 
@@ -49,12 +50,19 @@ $("document").ready(function (e) {
 		drop: function (event, ui) {
 			// alert('dropped');
 			// alert(carPrices.BMW)
-			
-			gameStats.totalAmount = gameStats.totalAmount  + carPrices.Porsche;
-			gameStats.clientsServed++;
-			gameStats.carsSold++;
 
+			var isPurchased = confirm("Would you like to purchase the car?");
+			
+			if(isPurchased == true){
+				gameStats.clientsServed++;
+				gameStats.totalAmount = gameStats.totalAmount  + carPrices.Porsche;
+				gameStats.carsSold++;
+			} else {
+				gameStats.clientsServed++;
+			}
+			
 			updateStats()
+			$(ui.draggable).remove();
 		}
 	});
 
