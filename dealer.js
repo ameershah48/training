@@ -37,7 +37,12 @@ $("document").ready(function (e) {
 
 	$(".place").droppable({
 		drop: function (event, ui) {
-			alert('dropped');
+			var client = $(ui.draggable);
+			var carPlace = $(this);
+
+			client.detach();
+			carPlace.append(client);
+			client.css({'position': 'absolute', 'top': '10px', 'left': '10px'});
 		}
 	});
 
