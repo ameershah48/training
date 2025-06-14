@@ -17,8 +17,9 @@ function newClient() {
 	var preference = Math.floor((Math.random() * 4));
 	var time = Math.floor((Math.random() * 10000) + 1);
 	var client = Math.floor((Math.random() * 10) + 1);
+	var brand = brandlist[preference];
 
-	$("#clients_queue").append('<div class="client client_' + client + '"><span class="preference">Client for ' + brandlist[preference] + '</span></div>');
+	$("#clients_queue").append('<div class="client client_' + client + '" data-brand=' + brand + '"><span class="preference">Client for ' + brand + '</span></div>');
 
 	$(".client").draggable({
 		containment: "#salon",
@@ -39,6 +40,9 @@ $("document").ready(function (e) {
 		drop: function (event, ui) {
 			var client = $(ui.draggable);
 			var carPlace = $(this);
+			var placeBrand = carPlace.data('brand');
+
+			alert(placeBrand)
 
 			client.detach();
 			carPlace.append(client);
