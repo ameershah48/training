@@ -20,7 +20,10 @@ function newClient() {
 
 	$("#clients_queue").append('<div class="client client_' + client + '"><span class="preference">Client for ' + brandlist[preference] + '</span></div>');
 
-	$(".client").draggable();
+	$(".client").draggable({
+		containment: "#salon",
+		revert: "invalid",
+	});
 
 	setTimeout(function () {
 		newClient();
