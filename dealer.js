@@ -7,10 +7,10 @@ var gameStats = {
 };
 
 var carPrices = {
-    "Porsche": 650000.00,
-    "Volkswagen": 180000.00,
-    "Audi": 300000.00,
-    "BMW": 250000.00
+    "porsche": 650000.00,
+    "volkswagen": 180000.00,
+    "audi": 300000.00,
+    "bmw": 250000.00
 };
 
 function newClient() {
@@ -66,15 +66,15 @@ $("document").ready(function (e) {
 
 	$("#cashier").droppable({
 		drop: function (event, ui) {
-			// alert('dropped');
-			// alert(carPrices.BMW)
-
 			var isPurchased = confirm("Would you like to purchase the car?");
-			
+			var client = $(ui.draggable);
+			var carBrand = client.data('brand').toLowerCase();
+			var carPrice = carPrices[carBrand];
+
 			if(isPurchased == true){
 				gameStats.clientsServed++;
-				gameStats.totalAmount = gameStats.totalAmount  + carPrices.Porsche;
 				gameStats.carsSold++;
+				gameStats.totalAmount = gameStats.totalAmount  + carPrice;
 			} else {
 				gameStats.clientsServed++;
 			}
