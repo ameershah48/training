@@ -13,6 +13,22 @@ var carPrices = {
     "bmw": 250000.00
 };
 
+var placeOccupied = {
+	"porsche": false,
+	"volkswagen": false,
+	"audi": false,
+	"bmw": false
+};
+
+var carBrandStock = {
+	"porsche": 4,
+	"volkswagen": 6,
+	"audi": 5,
+	"bmw": 3
+};
+
+var originalCarImages = {}; // New object to store original image paths
+
 function newClient() {
 	var preference = Math.floor((Math.random() * 4));
 	var time = Math.floor((Math.random() * 10000) + 1);
@@ -31,9 +47,16 @@ function newClient() {
 	}, 500);
 }
 
-
-
 $("document").ready(function (e) {
+	// Store original image paths when the document is ready
+	$(".place").each(function() {
+		var brand = $(this).data('brand');
+		originalCarImages[brand] = [];
+		$(this).find(".car-image").each(function() {
+			originalCarImages[brand].push($(this).attr("src"));
+		});
+	});
+
 	newClient();
 
 	$(".place").droppable({
@@ -44,6 +67,15 @@ $("document").ready(function (e) {
 
 			var placeBrand = carPlace.data('brand').toLowerCase();
 			var clientBrand = client.data('brand').toLowerCase();
+
+			if (placeOccupied[placeBrand] == true) {
+				queueArea.prepend(client);
+				client.css({'position': 'relative', 'top': '10px', 'left': '0px'});
+
+				return;
+			} else {
+				placeOccupied[placeBrand] = true;
+			}
 
 			if (placeBrand == clientBrand) {
 				client.detach();
@@ -58,9 +90,14 @@ $("document").ready(function (e) {
 
 	$("#exit").droppable({
 		drop: function (event, ui) {
+			var client = $(ui.draggable);
+			var carBrand = client.data('brand').toLowerCase();
+			
 			gameStats.clientsServed++;
+			placeOccupied[carBrand] = false;
+			
 			updateStats()
-			$(ui.draggable).remove();
+			client.remove();
 		}
 	});
 
@@ -75,22 +112,37 @@ $("document").ready(function (e) {
 				gameStats.clientsServed++;
 				gameStats.carsSold++;
 				gameStats.totalAmount = gameStats.totalAmount  + carPrice;
+				carBrandStock[carBrand]--;
 			} else {
 				gameStats.clientsServed++;
 			}
+
+			placeOccupied[carBrand] = false;
 			
 			updateStats()
 			$(ui.draggable).remove();
 		}
 	});
-
-	// $("#clients_served").text('hello dunia');
-	// $("#cars_sold").text('0');
-	// $("#amount").text('0');
 });
 
 function updateStats() {
 	$("#clients_served").text(gameStats.clientsServed);
 	$("#cars_sold").text(gameStats.carsSold);
 	$("#amount").text(gameStats.totalAmount);
+	updateSold();
+}
+
+function updateSold() {
+	for (var brand in carBrandStock) {
+		var placeElement = $(".place[data-brand='" + brand + "']");
+		var carImages = placeElement.find(".car-image");
+		var initialStock = originalCarImages[brand].length; // Get initial stock from stored original images
+		var soldCount = initialStock - carBrandStock[brand];
+
+		carImages.each(function(index) {
+			if (index < soldCount) {
+				$(this).attr("src", "images/Sold.jpg");
+			}
+		});
+	}
 }
