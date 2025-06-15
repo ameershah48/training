@@ -86,7 +86,12 @@ $("document").ready(function (e) {
 			placeOccupied[carBrand] = false;
 			
 			updateStats()
-			client.remove();
+
+			client.addClass('client-animation')
+
+			setTimeout(() => {
+				client.remove();
+			}, 1000)
 		}
 	});
 
@@ -109,7 +114,12 @@ $("document").ready(function (e) {
 			placeOccupied[carBrand] = false;
 			
 			updateStats()
-			$(ui.draggable).remove();
+			
+			client.addClass('client-animation')
+
+			setTimeout(() => {
+				client.remove();
+			}, 1000)
 		}
 	});
 });
