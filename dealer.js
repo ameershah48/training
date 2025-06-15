@@ -100,11 +100,15 @@ $("document").ready(function (e) {
 
 	$("#cashier").droppable({
 		drop: function (event, ui) {
-			var isPurchased = confirm("Would you like to purchase the car?");
 			var client = $(ui.draggable);
 			var clientBrand = client.data('brand').toLowerCase();
 			var carPrice = carPrices[clientBrand];
 			var queueArea = $("#clients_queue");
+
+			if(placeOccupied[clientBrand] == false){
+				removeClientToQueue(client, queueArea)
+				return;
+			}
 
 			if(carBrandStock[clientBrand] <= 0){
 				removeClientToQueue(client, queueArea)
@@ -112,6 +116,8 @@ $("document").ready(function (e) {
 
 				return;
 			}
+
+			var isPurchased = confirm("Would you like to purchase the car?");
 
 			if(isPurchased == true){
 				gameStats.clientsServed++;
