@@ -90,7 +90,7 @@ $("document").ready(function (e) {
 });
 
 function updateStats() {
-	$("#clients_served").text(gameStats.clientsServed);
-	$("#cars_sold").text(gameStats.carsSold);
-	$("#amount").text(gameStats.totalAmount);
+	$("#clients_served").text(gameStats.clientsServed + " clients");
+	$("#cars_sold").text(gameStats.carsSold + " cars");
+	$("#amount").text( "€ " + gameStats.totalAmount.toLocaleString('en-MY', { minimumFractionDigits: 2 }) );
 }
