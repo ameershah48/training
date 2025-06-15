@@ -57,10 +57,14 @@ $("document").ready(function (e) {
 			var placeBrand = carPlace.data('brand').toLowerCase();
 			var clientBrand = client.data('brand').toLowerCase();
 
-			if (placeOccupied[placeBrand] == true) {
-				queueArea.prepend(client);
-				client.css({'position': 'relative', 'top': '10px', 'left': '0px'});
+			if(carBrandStock[clientBrand] <= 0){
+				removeClientToQueue(client, queueArea);
+				alert("Cars is out of stock.")
+				return;
+			}
 
+			if (placeOccupied[placeBrand] == true) {
+				removeClientToQueue(client, queueArea);
 				return;
 			} else {
 				placeOccupied[placeBrand] = true;
@@ -68,11 +72,10 @@ $("document").ready(function (e) {
 
 			if (placeBrand == clientBrand) {
 				client.detach();
-				carPlace.append(client);
+				carPlace.append(client)
 				client.css({'position': 'absolute', 'top': '10px', 'left': '10px'});
 			} else {
-				queueArea.prepend(client);
-				client.css({'position': 'relative', 'top': '10px', 'left': '0px'});
+				removeClientToQueue(client, queueArea)
 			}
 		}
 	});
@@ -99,22 +102,30 @@ $("document").ready(function (e) {
 		drop: function (event, ui) {
 			var isPurchased = confirm("Would you like to purchase the car?");
 			var client = $(ui.draggable);
-			var carBrand = client.data('brand').toLowerCase();
-			var carPrice = carPrices[carBrand];
+			var clientBrand = client.data('brand').toLowerCase();
+			var carPrice = carPrices[clientBrand];
+			var queueArea = $("#clients_queue");
+
+			if(carBrandStock[clientBrand] <= 0){
+				removeClientToQueue(client, queueArea)
+				alert("Cars is out of stock.")
+
+				return;
+			}
 
 			if(isPurchased == true){
 				gameStats.clientsServed++;
 				gameStats.carsSold++;
 				gameStats.totalAmount = gameStats.totalAmount  + carPrice;
-				carBrandStock[carBrand]--;
+				carBrandStock[clientBrand]--;
 			} else {
 				gameStats.clientsServed++;
 			}
 
-			placeOccupied[carBrand] = false;
+			placeOccupied[clientBrand] = false;
 			
 			updateStats()
-			
+
 			client.addClass('client-animation')
 
 			setTimeout(() => {
@@ -144,4 +155,9 @@ function updateSold() {
 			}
 		});
 	}
+}
+
+function removeClientToQueue(client, queueArea){
+	queueArea.prepend(client);
+	client.css({'position': 'relative', 'top': '10px', 'left': '0px'});
 }
