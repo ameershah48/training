@@ -129,9 +129,7 @@ function updateSold() {
 		var currentStock = carBrandStock[brand];
 
 		carImages.each(function(index) {
-			if (index < currentStock) {
-				$(this).attr("src", $(this).data('original-src'));
-			} else {
+			if ((index + 1) > currentStock) {
 				$(this).attr("src", "images/Sold.jpg");
 			}
 		});
