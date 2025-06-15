@@ -132,27 +132,28 @@ $("document").ready(function (e) {
 					"No": function () {
 						$(this).dialog("close");
 					}
+				}, 
+				close: function() {
+					if (isPurchased == true) {
+						gameStats.clientsServed++;
+						gameStats.carsSold++;
+						gameStats.totalAmount = gameStats.totalAmount + carPrice;
+						carBrandStock[clientBrand]--;
+					} else {
+						gameStats.clientsServed++;
+					}
+		
+					placeOccupied[clientBrand] = false;
+		
+					updateStats()
+		
+					client.addClass('client-animation')
+		
+					setTimeout(() => {
+						client.remove();
+					}, 1000)
 				}
 			});
-
-			if (isPurchased == true) {
-				gameStats.clientsServed++;
-				gameStats.carsSold++;
-				gameStats.totalAmount = gameStats.totalAmount + carPrice;
-				carBrandStock[clientBrand]--;
-			} else {
-				gameStats.clientsServed++;
-			}
-
-			placeOccupied[clientBrand] = false;
-
-			updateStats()
-
-			client.addClass('client-animation')
-
-			setTimeout(() => {
-				client.remove();
-			}, 1000)
 		}
 	});
 });
