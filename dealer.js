@@ -184,8 +184,3 @@ function removeClientToQueue(client, queueArea) {
 	queueArea.prepend(client);
 	client.css({ 'position': 'relative', 'top': '10px', 'left': '0px' });
 }
-
-function showCustomDialog(callback) {
-	// var customDialog = $('#customDialog');
-	// customDialog.showModal();
-}
