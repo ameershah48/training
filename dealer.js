@@ -27,8 +27,6 @@ var carBrandStock = {
 	"bmw": 3
 };
 
-var originalCarImages = {}; // New object to store original image paths
-
 function newClient() {
 	var preference = Math.floor((Math.random() * 4));
 	var time = Math.floor((Math.random() * 10000) + 1);
@@ -48,15 +46,6 @@ function newClient() {
 }
 
 $("document").ready(function (e) {
-	// Store original image paths when the document is ready
-	$(".place").each(function() {
-		var brand = $(this).data('brand');
-		originalCarImages[brand] = [];
-		$(this).find(".car-image").each(function() {
-			originalCarImages[brand].push($(this).attr("src"));
-		});
-	});
-
 	newClient();
 
 	$(".place").droppable({
@@ -129,6 +118,7 @@ function updateStats() {
 	$("#clients_served").text(gameStats.clientsServed);
 	$("#cars_sold").text(gameStats.carsSold);
 	$("#amount").text(gameStats.totalAmount);
+	
 	updateSold();
 }
 
@@ -136,11 +126,12 @@ function updateSold() {
 	for (var brand in carBrandStock) {
 		var placeElement = $(".place[data-brand='" + brand + "']");
 		var carImages = placeElement.find(".car-image");
-		var initialStock = originalCarImages[brand].length; // Get initial stock from stored original images
-		var soldCount = initialStock - carBrandStock[brand];
+		var currentStock = carBrandStock[brand];
 
 		carImages.each(function(index) {
-			if (index < soldCount) {
+			if (index < currentStock) {
+				$(this).attr("src", $(this).data('original-src'));
+			} else {
 				$(this).attr("src", "images/Sold.jpg");
 			}
 		});
