@@ -30,7 +30,7 @@ var carBrandStock = {
 var clientCount = 0;
 
 function newClient() {
-	if (clientCount < 3) {
+	if (clientCount <= 10) {
 		var preference = Math.floor((Math.random() * 4));
 		var time = Math.floor((Math.random() * 10000) + 1);
 		var client = Math.floor((Math.random() * 10) + 1);
