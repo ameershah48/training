@@ -27,22 +27,28 @@ var carBrandStock = {
 	"bmw": 3
 };
 
+var clientCount = 0;
+
 function newClient() {
-	var preference = Math.floor((Math.random() * 4));
-	var time = Math.floor((Math.random() * 10000) + 1);
-	var client = Math.floor((Math.random() * 10) + 1);
-	var brand = brandlist[preference];
+	if (clientCount < 3) {
+		var preference = Math.floor((Math.random() * 4));
+		var time = Math.floor((Math.random() * 10000) + 1);
+		var client = Math.floor((Math.random() * 10) + 1);
+		var brand = brandlist[preference];
 
-	$("#clients_queue").append('<div class="client client_' + client + '" data-brand=' + brand + '><span class="preference">Client for ' + brand + '</span></div>');
+		var $newClient = $('<div class="client client_' + client + '" data-brand=' + brand + '><span class="preference">Client for ' + brand + '</span></div>');
+		$("#clients_queue").append($newClient);
 
-	$(".client").draggable({
-		containment: "#salon",
-		revert: "invalid",
-	});
+		$newClient.draggable({
+			containment: "#salon",
+			revert: "invalid",
+		});
+		clientCount++;
+	}
 
 	setTimeout(function () {
 		newClient();
-	}, 500);
+	}, time);
 }
 
 $("document").ready(function (e) {
@@ -94,6 +100,7 @@ $("document").ready(function (e) {
 
 			setTimeout(() => {
 				client.remove();
+				clientCount--;
 			}, 1000)
 		}
 	});
@@ -151,6 +158,7 @@ $("document").ready(function (e) {
 		
 					setTimeout(() => {
 						client.remove();
+						clientCount--;
 					}, 1000)
 				}
 			});
